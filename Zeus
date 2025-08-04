@@ -1,3 +1,5 @@
+print("Script executado.")
+
 _G.fastGrindActive = true
 print("Grind iniciado.")
 

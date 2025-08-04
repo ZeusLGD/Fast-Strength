@@ -1,59 +1,47 @@
-local player = game.Players.LocalPlayer
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
-local function unequipAllPets()
-    local petsFolder = player:WaitForChild("petsFolder")
-    for _, folder in pairs(petsFolder:GetChildren()) do
-        if folder:IsA("Folder") then
-            for _, pet in pairs(folder:GetChildren()) do
-                ReplicatedStorage.rEvents.equipPetEvent:FireServer("unequipPet", pet)
-            end
-        end
-    end
+if _G.fastGrindActive then
+    _G.fastGrindActive = false
+    print("Grind parado.")
+    return
 end
 
-local function equipUniquePet(petName)
-    local petsFolder = player:WaitForChild("petsFolder")
-    for _, folder in pairs(petsFolder:GetChildren()) do
-        if folder:IsA("Folder") then
-            for _, pet in pairs(folder:GetChildren()) do
-                if pet.Name == petName then
-                    ReplicatedStorage.rEvents.equipPetEvent:FireServer("equipPet", pet)
-                    return
-                end
-            end
+_G.fastGrindActive = true
+print("Grind iniciado.")
+
+local player = game:GetService("Players").LocalPlayer
+local delay = 0
+local loopAmount = 10
+
+for i = 1, loopAmount do
+    task.spawn(function()
+        while _G.fastGrindActive do
+            player.muscleEvent:FireServer("rep")
+            task.wait(delay)
         end
-    end
+    end)
 end
 
-local isGrinding = false
-
-Tabs.Strength:AddToggle("FastStrengthToggle", {
-    Title = "Fast Strength (Need 7-8 Packs)",
-    Default = false
-}):OnChanged(function(state)
-    if state then
-        local success, err = pcall(function()
-            isGrinding = true
-            unequipAllPets()
-            task.wait(0.2)
-            equipUniquePet("Swift Samurai")
-            task.wait(0.2)
-
-            for i = 1, 23 do
-                task.spawn(function()
-                    while isGrinding do
-                        player.muscleEvent:FireServer("rep")
-                        task.wait()
-                    end
-                end)
-            end
-        end)
-        if not success then
-            warn("Erro ao iniciar Fast Strength:", err)
+-- loop parcial 
+task.spawn(function()
+    while _G.fastGrindActive do
+        if math.random() < 0.1 then
+            player.muscleEvent:FireServer("rep")
         end
-    else
-        isGrinding = false
-        unequipAllPets()
+        task.wait(delay)
+    end
+end)
+
+task.spawn(function()
+    while _G.fastGrindActive do
+        local pingStat = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]
+        local ping = pingStat and pingStat:GetValue() or 0
+
+        if ping > 500 then
+            delay = 0.002
+        else
+            delay = 0
+        end
+
+        print("Delay:", delay, "Ping:", ping)
+        task.wait(1)
     end
 end)

@@ -1,6 +1,9 @@
+_G.fastGrindActive = true
+print("Grind iniciado.")
+
 local player = game:GetService("Players").LocalPlayer
 local delay = 0
-local loopAmount = 10
+local loopAmount = 12
 
 for i = 1, loopAmount do
     task.spawn(function()
@@ -11,7 +14,6 @@ for i = 1, loopAmount do
     end)
 end
 
--- loop parcial 
 task.spawn(function()
     while _G.fastGrindActive do
         if math.random() < 0.1 then

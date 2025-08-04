@@ -1,12 +1,3 @@
-if _G.fastGrindActive then
-    _G.fastGrindActive = false
-    print("Grind parado.")
-    return
-end
-
-_G.fastGrindActive = true
-print("Grind iniciado.")
-
 local player = game:GetService("Players").LocalPlayer
 local delay = 0
 local loopAmount = 10

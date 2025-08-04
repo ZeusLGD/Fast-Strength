@@ -1,4 +1,9 @@
-	  print("Grind parado.")
+local player = game.Players.LocalPlayer
+local muscleEvent = player:WaitForChild("muscleEvent")
+local replicatedStorage = game:GetService("ReplicatedStorage")
+
+- Fast Strength
+print("Grind parado.")
 		unequipAllPets()
 		return
 	end

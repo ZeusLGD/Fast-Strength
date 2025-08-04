@@ -5,7 +5,7 @@ print("Grind iniciado.")
 
 local player = game:GetService("Players").LocalPlayer
 local delay = 0
-local loopAmount = 12
+local loopAmount = 10
 
 for i = 1, loopAmount do
     task.spawn(function()

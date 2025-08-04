@@ -1,0 +1,53 @@
+	  print("Grind parado.")
+		unequipAllPets()
+		return
+	end
+
+	if not bool then
+		unequipAllPets()
+		return
+	end
+
+	_G.fastGrindActive = true
+	print("Grind iniciado.")
+
+	equipUniquePet("Swift Samurai")
+
+	local player = game:GetService("Players").LocalPlayer
+	local delay = 0
+	local loopAmount = 12.9
+
+	for i = 1, loopAmount do
+		task.spawn(function()
+			while _G.fastGrindActive do
+				player.muscleEvent:FireServer("rep")
+				task.wait(delay)
+			end
+		end)
+	end
+
+	task.spawn(function()
+		while _G.fastGrindActive do
+			if math.random() < 0.9 then
+				player.muscleEvent:FireServer("rep")
+			end
+			task.wait(delay)
+		end
+	end)
+
+	task.spawn(function()
+		while _G.fastGrindActive do
+			local pingStat = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]
+			local ping = pingStat and pingStat:GetValue() or 0
+
+			if ping > 500 then
+				delay = 0.002
+			else
+				delay = 0
+			end
+
+			print("Delay:", delay, "Ping:", ping)
+			task.wait(1)
+		end
+	end)
+end)
